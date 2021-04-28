@@ -1,5 +1,4 @@
 from snake_mod import *
-import sys
 
 
 def main():
@@ -8,8 +7,8 @@ def main():
     screen = screen_init()
 
     # initial position for snake with food
-    x1y1, x2y2, snake_len = snake_initial_position(screen)
-    print(x1y1, x2y2, snake_len)
+    x1y1, x2y2, snake_len, snake_cur_dir = snake_initial_position(screen)
+    print(x1y1, x2y2, snake_len, snake_cur_dir)
 
     # once any arrow key pressed, start the game
     game_on, snake_speed, key_pressed = start_game()
@@ -20,8 +19,9 @@ def main():
     # while game is on
     while game_on:
         clock.tick(snake_speed)
+
         # move the snake
-        x1y1, x2y2 = move_snake(snake_speed, key_pressed,
+        x1y1, x2y2 = move_snake(snake_speed, key_pressed, snake_cur_dir,
                                 x1y1, x2y2, screen, snake_len)
         print("#", x1y1, x2y2)
 
@@ -29,7 +29,10 @@ def main():
         # if yes, end game
         hit_wall = did_hit_wall(x1y1, x2y2)
         if hit_wall:
-            sys.exit()
+            game_on = False
+
+        # check if it has hit its own body
+        # if yes, end game
 
         for event in pygame.event.get():
             # if user clicks exit button
