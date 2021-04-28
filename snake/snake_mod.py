@@ -1,5 +1,5 @@
 import pygame
-from time import sleep
+import sys
 
 
 screen_size = 500, 500
@@ -96,15 +96,24 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
         if down is pressed
             no action
     """
+    print(snake_cur_dir)
     if snake_cur_dir == "right" or snake_cur_dir == "left":
-        if key_pressed == "up" or key_pressed == "down":
-            print("change dir")
+        if key_pressed == "up":
+            print("change dir to up")
+            snake_cur_dir = "up"
+
+        elif key_pressed == "down":
+            print("change dir to down")
+            snake_cur_dir = "down"
 
     elif snake_cur_dir == "up" or snake_cur_dir == "down":
-        if key_pressed == "right" or key_pressed == "left":
-            print("change dir")
+        if key_pressed == "right":
+            print("change dir to right")
+            snake_cur_dir = "right"
 
-    key_pressed = ""
+        elif key_pressed == "left":
+            print("change dir to left")
+            snake_cur_dir = "left"
 
     for x in range(snake_len // 10):
         x1 = x1 + snake_body_scales
@@ -116,7 +125,7 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
 
     x2y2[0] = x2
 
-    return x1y1, x2y2
+    return x1y1, x2y2, snake_cur_dir
 
 
 def start_game():
