@@ -14,7 +14,7 @@ colors = {
 
 # variables that would change over the game
 snake_inc_level = 2
-initial_snake_len = 50
+initial_snake_len = 40
 
 # DONT ALTER below variables
 snake_body_scales = 10
@@ -35,6 +35,13 @@ def screen_init():
 def snake_initial_position(screen):
     global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
 
+    snake_current_dir = "right"
+
+    myfont = pygame.font.SysFont("Comic Sans MS", 15)
+    message = "Press any arrow key to start the game"
+    label = myfont.render(message, 1, colors["GREEN"])
+    screen.blit(label, (10, 10))
+
     x1 = x2 = mid_x_screen_point = screen_size[0]/2
     y1 = y2 = mid_y_screen_point = screen_size[1]/2
 
@@ -51,10 +58,11 @@ def snake_initial_position(screen):
     x1y1 = [mid_x_screen_point, y1]
     x2y2 = [mid_x_screen_point + initial_snake_len, y2]
 
-    return x1y1, x2y2, initial_snake_len
+    return x1y1, x2y2, initial_snake_len, snake_current_dir
 
 
-def move_snake(snake_speed, key_pressed, x1y1, x2y2, screen, snake_len):
+def move_snake(snake_speed, key_pressed, snake_cur_dir,
+               x1y1, x2y2, screen, snake_len):
 
     global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
 
@@ -64,6 +72,39 @@ def move_snake(snake_speed, key_pressed, x1y1, x2y2, screen, snake_len):
 
     x1 = x1y1[0]
     y1 = x1y1[1]
+
+    """
+    changing snake direction logic
+
+    if the snake is facing right or left direction
+        if right is key_pressed
+            no action
+        if left is pressed
+            no action
+        if up is pressed
+            move up
+        if down is pressed
+            move down
+
+    if the snake is facing up or down direction
+        if right is pressed
+            move right
+        if left is pressed
+            move left
+        if up is pressed
+            no action
+        if down is pressed
+            no action
+    """
+    if snake_cur_dir == "right" or snake_cur_dir == "left":
+        if key_pressed == "up" or key_pressed == "down":
+            print("change dir")
+
+    elif snake_cur_dir == "up" or snake_cur_dir == "down":
+        if key_pressed == "right" or key_pressed == "left":
+            print("change dir")
+
+    key_pressed = ""
 
     for x in range(snake_len // 10):
         x1 = x1 + snake_body_scales
