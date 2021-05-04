@@ -37,6 +37,9 @@ def main():
 
         # check if it has hit its own body
         # if yes, end game
+        bite_itself = did_bite_itself(snake_scale_positions)
+        if bite_itself:
+        	game_on = False
 
         for event in pygame.event.get():
             # if user clicks exit button
