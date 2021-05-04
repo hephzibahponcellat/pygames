@@ -7,6 +7,7 @@ def main():
     screen = screen_init()
 
     food_pos = create_food(screen)
+    ate_food = False
 
     # initial position for snake with food
     x1y1, x2y2, snake_len, snake_cur_dir, snake_scale_positions = snake_initial_position(screen)
@@ -44,10 +45,17 @@ def main():
         # if yes, end game
         bite_itself = did_bite_itself(snake_scale_positions)
         if bite_itself:
-        	game_on = False
+            game_on = False
          
         # check if it has ate the food
         # if yes, add score, grow the snake, create new food
+        ate_food = check_if_ate_food(food_pos, snake_scale_positions)
+        if ate_food:
+            food_pos = create_food(screen)
+            
+            # increasing snake length
+        	snake_scale_positions.insert(0, snake_scale_positions[0])
+            
 
         for event in pygame.event.get():
             # if user clicks exit button
