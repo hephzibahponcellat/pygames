@@ -9,7 +9,8 @@ colors = {
     "WHITE": (255, 255, 255),
     "RED": (255, 0, 0),
     "GREEN": (0, 255, 0),
-    "BLUE": (0, 0, 255)
+    "BLUE": (0, 0, 255),
+    "ORANGE": (255, 255, 0)
 }
 
 # variables that would change over the game
@@ -56,6 +57,7 @@ def snake_initial_position(screen):
 
         snake_scale_positions.append(((x1, y1), (x2, y2)))
 
+    pygame.draw.line(screen, colors["ORANGE"], (x1, y1), (x2, y2), 8)
     pygame.display.flip()
 
     x1y1 = [mid_x_screen_point, y1]
@@ -115,16 +117,24 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
 
     del snake_scales_positions[0]
 
-    x1y1 = snake_scales_positions[-1][1]
-    x2y2 = (x1y1[0] + snake_body_scales, x1y1[1])
-    snake_scales_positions.append((x1y1, x2y2))
-
     for pos in snake_scales_positions:
         x1y1 = pos[0]
         x2y2 = pos[1]
 
         pygame.draw.line(screen, colors["GREEN"], x1y1, x2y2, 8)
 
+    x1y1 = snake_scales_positions[-1][1]
+    if snake_cur_dir == "up":
+        x2y2 = (x1y1[0], x1y1[1] - snake_body_scales)
+    elif snake_cur_dir == "down":
+        x2y2 = (x1y1[0], x1y1[1] + snake_body_scales)
+    elif snake_cur_dir == "right":
+        x2y2 = (x1y1[0] + snake_body_scales, x1y1[1])
+    else:
+        x2y2 = (x1y1[0] - snake_body_scales, x1y1[1])
+    snake_scales_positions.append((x1y1, x2y2))
+
+    pygame.draw.line(screen, colors["ORANGE"], x1y1, x2y2, 8)
     pygame.display.flip()
 
     return x1y1, x2y2, snake_cur_dir, snake_scales_positions
