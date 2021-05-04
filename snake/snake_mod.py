@@ -137,7 +137,6 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
     snake_scales_positions.append((x1y1, x2y2))
 
     pygame.draw.line(screen, colors["ORANGE"], x1y1, x2y2, 8)
-    pygame.display.flip()
 
     return x1y1, x2y2, snake_cur_dir, snake_scales_positions
 
@@ -220,3 +219,10 @@ def check_if_ate_food(food_pos, snake_scale_positions):
 
     if (food_pos_x - 8 <= snake_head_x <= food_pos_x + 8) and (food_pos_y - 8 <= snake_head_y <= food_pos_y + 8):
         return True
+
+def write_score(screen, score):
+    myfont = pygame.font.SysFont("Comic Sans MS", 15)
+    message = "your score: " + str(score)
+    label = myfont.render(message, 1, colors["GREEN"])
+    screen.blit(label, (10, 10))
+    pygame.display.flip()
