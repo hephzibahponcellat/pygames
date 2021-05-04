@@ -130,8 +130,11 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
         x2y2 = (x1y1[0], x1y1[1] + snake_body_scales)
     elif snake_cur_dir == "right":
         x2y2 = (x1y1[0] + snake_body_scales, x1y1[1])
-    else:
+    elif snake_cur_dir == "left":
         x2y2 = (x1y1[0] - snake_body_scales, x1y1[1])
+    else:
+    	sys.exit()
+
     snake_scales_positions.append((x1y1, x2y2))
 
     pygame.draw.line(screen, colors["ORANGE"], x1y1, x2y2, 8)
