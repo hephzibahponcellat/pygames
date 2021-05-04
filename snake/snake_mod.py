@@ -66,13 +66,6 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
 
     global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
 
-    screen.fill(colors["BLACK"])
-
-    x1y1[0] = x1y1[0] + snake_body_scales
-
-    x1 = x1y1[0]
-    y1 = x1y1[1]
-
     """
     changing snake direction logic
 
@@ -114,6 +107,13 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
         elif key_pressed == "left":
             print("change dir to left")
             snake_cur_dir = "left"
+
+    screen.fill(colors["BLACK"])
+
+    x1y1[0] = x1y1[0] + snake_body_scales
+
+    x1 = x1y1[0]
+    y1 = x1y1[1]
 
     for x in range(snake_len // 10):
         x1 = x1 + snake_body_scales
