@@ -1,5 +1,6 @@
 import pygame
 import sys
+from random import randint
 
 
 screen_size = 500, 500
@@ -113,7 +114,6 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
             print("change dir to left")
             snake_cur_dir = "left"
 
-    screen.fill(colors["BLACK"])
 
     del snake_scales_positions[0]
 
@@ -193,3 +193,20 @@ def did_bite_itself(snake_scale_positions):
 
 		if snake_head_x == x and snake_head_y == y:
 			return True
+
+def create_food(screen, food_pos = None):
+	global screen_size, colors
+
+	if not food_pos:
+		x = randint(0, 500)
+		y = randint(0, 500)
+
+		food_pos = (x, y)
+
+	pygame.draw.circle(screen, colors["GREEN"], food_pos, 5)
+
+	return food_pos
+
+
+def clear_screen(screen):
+    screen.fill(colors["BLACK"])
