@@ -15,8 +15,9 @@ colors = {
 }
 
 # variables that would change over the game
-snake_inc_level = 2
 initial_snake_len = 40
+ate_food = False
+snake_speed = 10
 
 # DONT ALTER below variables
 snake_body_scales = 10
@@ -54,23 +55,23 @@ def snake_initial_position(screen):
         x1 = x1 + snake_body_scales
         x2 = x2 + snake_body_scales
 
-        pygame.draw.line(screen, colors["GREEN"], (x1, y1), (x2, y2), 8)
+        pygame.draw.line(screen, colors["GREEN"], (x1, y1), (x2, y2), snake_fat)
 
         snake_scale_positions.append(((x1, y1), (x2, y2)))
 
-    pygame.draw.line(screen, colors["ORANGE"], (x1, y1), (x2, y2), 8)
+    pygame.draw.line(screen, colors["ORANGE"], (x1, y1), (x2, y2), snake_fat)
     pygame.display.flip()
 
     x1y1 = [mid_x_screen_point, y1]
     x2y2 = [mid_x_screen_point + initial_snake_len, y2]
 
-    return x1y1, x2y2, initial_snake_len, snake_current_dir, snake_scale_positions
+    return snake_current_dir, snake_scale_positions
 
 
-def move_snake(snake_speed, key_pressed, snake_cur_dir,
-               x1y1, x2y2, screen, snake_len, snake_scales_positions):
+def move_snake(key_pressed, snake_cur_dir,
+               screen, snake_scales_positions):
 
-    global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
+    global screen_size, colors, snake_fat, snake_body_scales
 
     """
     changing snake direction logic
@@ -138,13 +139,11 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
 
     pygame.draw.line(screen, colors["ORANGE"], x1y1, x2y2, 8)
 
-    return x1y1, x2y2, snake_cur_dir, snake_scales_positions
+    return snake_cur_dir, snake_scales_positions
 
 
 def start_game():
-    global snake_inc_level
     game_on = False
-    snake_speed = 0
     key_pressed = ""
 
     while not game_on:
@@ -164,19 +163,21 @@ def start_game():
 
                 if key_pressed:
                     game_on = True
-                    snake_speed += snake_inc_level
 
-                    return game_on, snake_speed, key_pressed
+                    return game_on, key_pressed
 
 
-def did_hit_wall(x1y1, x2y2):
+def did_hit_wall(snake_scale_positions):
     global screen_size
 
-    if x1y1[0] >= screen_size[0] or x2y2[0] >= screen_size[0] \
-       or x1y1[1] >= screen_size[1] or x2y2[1] >= screen_size[1]:
+    snake_head = snake_scale_positions[-1][1]
+    snake_head_x = snake_head[0]
+    snake_head_y = snake_head[1]
+
+    if snake_head_x >= screen_size[0] or snake_head_x <= 0:
         return True
 
-    if x1y1[0] <= 0 or x2y2[0] <= 0 or x1y1[1] <= 0 or x2y2[1] <= 0:
+    if snake_head_y >= screen_size[1] or snake_head_y <= 0:
         return True
 
 
@@ -196,8 +197,8 @@ def create_food(screen, food_pos = None):
     global screen_size, colors
 
     if not food_pos:
-        x = randint(0, 500)
-        y = randint(0, 500)
+        x = randint(0, screen_size[0] - 10)
+        y = randint(0, screen_size[1] - 10)
 
         food_pos = (x, y)
 
@@ -220,9 +221,14 @@ def check_if_ate_food(food_pos, snake_scale_positions):
     if (food_pos_x - 8 <= snake_head_x <= food_pos_x + 8) and (food_pos_y - 8 <= snake_head_y <= food_pos_y + 8):
         return True
 
+
 def write_score(screen, score):
     myfont = pygame.font.SysFont("Comic Sans MS", 15)
     message = "your score: " + str(score)
     label = myfont.render(message, 1, colors["GREEN"])
     screen.blit(label, (10, 10))
+
+
+def update_screen():
     pygame.display.flip()
+	
