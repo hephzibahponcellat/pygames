@@ -15,7 +15,7 @@ colors = {
 
 # variables that would change over the game
 snake_inc_level = 2
-initial_snake_len = 40
+initial_snake_len = 100
 
 # DONT ALTER below variables
 snake_body_scales = 10
@@ -180,3 +180,16 @@ def did_hit_wall(x1y1, x2y2):
 
     if x1y1[0] <= 0 or x2y2[0] <= 0 or x1y1[1] <= 0 or x2y2[1] <= 0:
         return True
+
+
+def did_bite_itself(snake_scale_positions):
+	snake_head = snake_scale_positions[-1][1]
+	snake_head_x = snake_head[0]
+	snake_head_y = snake_head[1]
+
+	for pos in snake_scale_positions:
+		x = pos[0][0]
+		y = pos[0][1]
+
+		if snake_head_x == x and snake_head_y == y:
+			return True
