@@ -21,8 +21,9 @@ def main():
         clock.tick(snake_speed)
 
         # move the snake
-        x1y1, x2y2, snake_cur_dir = move_snake(snake_speed, key_pressed, snake_cur_dir,
-                                x1y1, x2y2, screen, snake_len)
+        x1y1, x2y2, snake_cur_dir = move_snake(snake_speed, key_pressed,
+                                               snake_cur_dir, x1y1, x2y2,
+                                               screen, snake_len)
         key_pressed = ""
         print("#", x1y1, x2y2)
 
