@@ -8,6 +8,7 @@ def main():
 
     food_pos = create_food(screen)
     ate_food = False
+    score = 0
 
     # initial position for snake with food
     x1y1, x2y2, snake_len, snake_cur_dir, snake_scale_positions = snake_initial_position(screen)
@@ -22,6 +23,8 @@ def main():
     # while game is on
     while game_on:
         clock.tick(snake_speed)
+
+        # clear the screen
         clear_screen(screen)
 
         # draw the existing snake_food
@@ -51,11 +54,12 @@ def main():
         # if yes, add score, grow the snake, create new food
         ate_food = check_if_ate_food(food_pos, snake_scale_positions)
         if ate_food:
-            food_pos = create_food(screen)
-            
-            # increasing snake length
         	snake_scale_positions.insert(0, snake_scale_positions[0])
-            
+        	food_pos = create_food(screen)
+        	score += 10
+
+        # write score board to the game screen
+        write_score(screen, score)
 
         for event in pygame.event.get():
             # if user clicks exit button
@@ -73,9 +77,6 @@ def main():
                     key_pressed = "up"
                 elif event.key == pygame.K_DOWN:
                     key_pressed = "down"
-
-
-    # update score board
 
 
 if __name__ == "__main__":
