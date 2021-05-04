@@ -36,6 +36,7 @@ def snake_initial_position(screen):
     global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
 
     snake_current_dir = "right"
+    snake_scale_positions = []
 
     myfont = pygame.font.SysFont("Comic Sans MS", 15)
     message = "Press any arrow key to start the game"
@@ -53,16 +54,18 @@ def snake_initial_position(screen):
 
         pygame.draw.line(screen, colors["GREEN"], (x1, y1), (x2, y2), 8)
 
+        snake_scale_positions.append(((x1, y1), (x2, y2)))
+
     pygame.display.flip()
 
     x1y1 = [mid_x_screen_point, y1]
     x2y2 = [mid_x_screen_point + initial_snake_len, y2]
 
-    return x1y1, x2y2, initial_snake_len, snake_current_dir
+    return x1y1, x2y2, initial_snake_len, snake_current_dir, snake_scale_positions
 
 
 def move_snake(snake_speed, key_pressed, snake_cur_dir,
-               x1y1, x2y2, screen, snake_len):
+               x1y1, x2y2, screen, snake_len, snake_scales_positions):
 
     global screen_size, colors, initial_snake_len, snake_fat, snake_body_scales
 
@@ -110,22 +113,21 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
 
     screen.fill(colors["BLACK"])
 
-    x1y1[0] = x1y1[0] + snake_body_scales
+    del snake_scales_positions[0]
 
-    x1 = x1y1[0]
-    y1 = x1y1[1]
+    x1y1 = snake_scales_positions[-1][1]
+    x2y2 = (x1y1[0] + snake_body_scales, x1y1[1])
+    snake_scales_positions.append((x1y1, x2y2))
 
-    for x in range(snake_len // 10):
-        x1 = x1 + snake_body_scales
-        x2 = x1 + snake_body_scales
+    for pos in snake_scales_positions:
+        x1y1 = pos[0]
+        x2y2 = pos[1]
 
-        pygame.draw.line(screen, colors["GREEN"], (x1, y1), (x2, y1), 8)
+        pygame.draw.line(screen, colors["GREEN"], x1y1, x2y2, 8)
 
     pygame.display.flip()
 
-    x2y2[0] = x2
-
-    return x1y1, x2y2, snake_cur_dir
+    return x1y1, x2y2, snake_cur_dir, snake_scales_positions
 
 
 def start_game():
