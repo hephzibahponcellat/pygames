@@ -7,7 +7,7 @@ def main():
     screen = screen_init()
 
     # initial position for snake with food
-    x1y1, x2y2, snake_len, snake_cur_dir = snake_initial_position(screen)
+    x1y1, x2y2, snake_len, snake_cur_dir, snake_scale_positions = snake_initial_position(screen)
     print(x1y1, x2y2, snake_len, snake_cur_dir)
 
     # once any arrow key pressed, start the game
@@ -21,9 +21,11 @@ def main():
         clock.tick(snake_speed)
 
         # move the snake
-        x1y1, x2y2, snake_cur_dir = move_snake(snake_speed, key_pressed,
-                                               snake_cur_dir, x1y1, x2y2,
-                                               screen, snake_len)
+        x1y1, x2y2, snake_cur_dir,\
+        snake_scale_positions = move_snake(snake_speed, key_pressed,
+                                           snake_cur_dir, x1y1, x2y2,
+                                           screen, snake_len,
+                                           snake_scale_positions)
         key_pressed = ""
         print("#", x1y1, x2y2)
 
