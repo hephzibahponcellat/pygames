@@ -16,7 +16,7 @@ colors = {
 
 # variables that would change over the game
 snake_inc_level = 2
-initial_snake_len = 100
+initial_snake_len = 40
 
 # DONT ALTER below variables
 snake_body_scales = 10
@@ -114,7 +114,6 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
             print("change dir to left")
             snake_cur_dir = "left"
 
-
     del snake_scales_positions[0]
 
     for pos in snake_scales_positions:
@@ -133,7 +132,7 @@ def move_snake(snake_speed, key_pressed, snake_cur_dir,
     elif snake_cur_dir == "left":
         x2y2 = (x1y1[0] - snake_body_scales, x1y1[1])
     else:
-    	sys.exit()
+        sys.exit()
 
     snake_scales_positions.append((x1y1, x2y2))
 
@@ -183,30 +182,41 @@ def did_hit_wall(x1y1, x2y2):
 
 
 def did_bite_itself(snake_scale_positions):
-	snake_head = snake_scale_positions[-1][1]
-	snake_head_x = snake_head[0]
-	snake_head_y = snake_head[1]
+    snake_head = snake_scale_positions[-1][1]
+    snake_head_x = snake_head[0]
+    snake_head_y = snake_head[1]
 
-	for pos in snake_scale_positions:
-		x = pos[0][0]
-		y = pos[0][1]
+    for pos in snake_scale_positions:
+        x = pos[0][0]
+        y = pos[0][1]
 
-		if snake_head_x == x and snake_head_y == y:
-			return True
+        if snake_head_x == x and snake_head_y == y:
+            return True
 
 def create_food(screen, food_pos = None):
-	global screen_size, colors
+    global screen_size, colors
 
-	if not food_pos:
-		x = randint(0, 500)
-		y = randint(0, 500)
+    if not food_pos:
+        x = randint(0, 500)
+        y = randint(0, 500)
 
-		food_pos = (x, y)
+        food_pos = (x, y)
 
-	pygame.draw.circle(screen, colors["GREEN"], food_pos, 5)
+    pygame.draw.circle(screen, colors["RED"], food_pos, 8)
 
-	return food_pos
+    return food_pos
 
 
 def clear_screen(screen):
     screen.fill(colors["BLACK"])
+
+
+def check_if_ate_food(food_pos, snake_scale_positions):
+    snake_head_x = int(snake_scale_positions[-1][1][0])
+    snake_head_y = int(snake_scale_positions[-1][1][1])
+
+    food_pos_x = food_pos[0]
+    food_pos_y = food_pos[1]
+
+    if (food_pos_x - 8 <= snake_head_x <= food_pos_x + 8) and (food_pos_y - 8 <= snake_head_y <= food_pos_y + 8):
+        return True
