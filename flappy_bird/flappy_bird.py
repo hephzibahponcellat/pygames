@@ -51,7 +51,7 @@ class Bird(GameScreen):
     def __init__(self, game_screen):
         self.gs = game_screen
         self.bird_pos = {'x': 50, 'y': 200}
-        self.fly_up = True
+        self.wing_up = True
 
         self.bird_up_img = 'images/bird_up.png'
         self.bird_down_img = 'images/bird_down.png'
@@ -60,11 +60,11 @@ class Bird(GameScreen):
         self.bird_down = pygame.image.load(self.bird_down_img)
 
     def fly(self, screen):
-        if self.fly_up:
-            self.fly_up = False
+        if self.wing_up:
+            self.wing_up = False
             screen.blit(self.bird_up, (self.bird_pos['x'], self.bird_pos['y']))
         else:
-            self.fly_up = True
+            self.wing_up = True
             screen.blit(self.bird_down, (self.bird_pos['x'], self.bird_pos['y']))
 
     def fly_up_down(self, screen, key_pressed):
