@@ -5,13 +5,15 @@ def play_game():
     pass
 
 
-def game_not_started(screen, bg):
+def game_not_started(screen, bg, bird):
     bg.update_background(screen)
+    bird.fly(screen)
 
 
 def main():
     s = GameScreen()
     bg = Background(s)
+    bird = Bird(s)
 
     screen = s.create_screen()
 
@@ -36,7 +38,7 @@ def main():
         if start_game:
             play_game()
         else:
-            game_not_started(screen, bg)
+            game_not_started(screen, bg, bird)
 
         pygame.display.flip()
         pygame.time.delay(250)
