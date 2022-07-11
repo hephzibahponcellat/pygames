@@ -3,13 +3,13 @@ import random
 
 
 class GameScreen():
-    def __init__(self, height=500, width=500, caption='Flappy Bird'):
-        self.screen_height = height
-        self.screen_width = width
-        self.caption = caption
+    def __init__(self):
+        self.SCREEN_HEIGHT = 500
+        self.screen_width = 500
+        self.caption = 'Flappy Bird'
 
     def create_screen(self):
-        screen = pygame.display.set_mode((self.screen_height, self.screen_width))
+        screen = pygame.display.set_mode((self.SCREEN_HEIGHT, self.screen_width))
         pygame.display.set_caption(self.caption)
 
         return screen
@@ -25,7 +25,7 @@ class Background(GameScreen):
         self.bg = pygame.image.load(self.bg_img)
         self.fence = pygame.image.load(self.fence_img)
 
-        self.fence_y = self.gs.screen_height - 40
+        self.fence_y = self.gs.SCREEN_HEIGHT - 40
         self.fences = [{'x': 0, 'y': self.fence_y}]
 
     def update_bg_fence(self, screen):
