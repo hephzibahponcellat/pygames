@@ -19,19 +19,19 @@ def main():
     start_game = False
     while game_running:
         # Get all events
-        # Check for Quit event
         for event in pygame.event.get():
+            # Check for Quit event
             if event.type == pygame.QUIT:
                 game_running = False
 
-            # Check for space / mouse press
+            # Check for space / mouse click
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     start_game = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 start_game = True
 
-        # if yes, start game
+        # if space / mouse clicked, start game
         # else just make the bird fly
         if start_game:
             play_game()
