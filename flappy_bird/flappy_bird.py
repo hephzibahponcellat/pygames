@@ -15,7 +15,7 @@ class GameScreen():
         return screen
 
 
-class BgFence(GameScreen):
+class Background(GameScreen):
 
     def __init__(self, game_screen, bg_img='images/bg.png', fence_img='images/fence.png'):
         self.gs = game_screen

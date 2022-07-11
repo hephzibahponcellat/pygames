@@ -11,7 +11,7 @@ def game_not_started(screen, bg):
 
 def main():
     s = GameScreen()
-    bg = BgFence(s)
+    bg = Background(s)
 
     screen = s.create_screen()
 
