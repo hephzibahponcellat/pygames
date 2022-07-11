@@ -17,10 +17,10 @@ class GameScreen():
 
 class Background(GameScreen):
 
-    def __init__(self, game_screen, bg_img='images/bg.png', fence_img='images/fence.png'):
+    def __init__(self, game_screen):
         self.gs = game_screen
-        self.bg_img = bg_img
-        self.fence_img = fence_img
+        self.bg_img = 'images/bg.png'
+        self.fence_img = 'images/fence.png'
 
         self.bg = pygame.image.load(self.bg_img)
         self.fence = pygame.image.load(self.fence_img)
@@ -58,7 +58,6 @@ class Bird(GameScreen):
 
         self.bird_up = pygame.image.load(self.bird_up_img)
         self.bird_down = pygame.image.load(self.bird_down_img)
-
 
     def fly(self, screen):
         if self.fly_up:
