@@ -68,6 +68,15 @@ class Bird(GameScreen):
             self.fly_up = True
             screen.blit(self.bird_down, (self.bird_pos['x'], self.bird_pos['y']))
 
+    def fly_up_down(self, screen, key_pressed):
+        # if key pressed move bird up
+        # else move bird down
+        if key_pressed:
+            self.bird_pos['y'] -= 20
+        else:
+            self.bird_pos['y'] += 20
+
+        self.fly(screen)
 
 
 class Pipe():
