@@ -28,7 +28,7 @@ class Background(GameScreen):
         self.fence_y = self.gs.SCREEN_HEIGHT - 40
         self.fences = [{'x': 0, 'y': self.fence_y}]
 
-    def update_bg_fence(self, screen):
+    def update_background(self, screen):
         screen.blit(self.bg, (0, 0))
 
         for fence in self.fences:

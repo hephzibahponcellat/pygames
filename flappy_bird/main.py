@@ -6,7 +6,7 @@ def play_game():
 
 
 def game_not_started(screen, bg):
-    bg.update_bg_fence(screen)
+    bg.update_background(screen)
 
 
 def main():
