@@ -15,6 +15,23 @@ class GameScreen():
         return screen
 
 
+class Score():
+    def __init__(self):
+        self.game_score = 0
+        self.IMPACT_FONT = 'impact'
+        self.IMPACT_FONT_SIZE = 40
+        self.SCORE_POS = (250, 100)
+        self.SCORE_COLOR = (255, 255, 0)
+
+        pygame.font.init()
+        self.score = pygame.font.SysFont(self.IMPACT_FONT, self.IMPACT_FONT_SIZE)
+
+    def display_score(self, screen):
+        score = str(self.game_score)
+        label = self.score.render(score, 1, self.SCORE_COLOR)
+        screen.blit(label, self.SCORE_POS)
+
+
 class Background(GameScreen):
 
     def __init__(self, game_screen):
