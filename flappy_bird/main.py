@@ -2,15 +2,14 @@ from flappy_bird import *
 
 
 def play_game(screen, bg, bird, key_pressed):
-    bg.update_background(screen)
-    bird.fly_up_down(screen, key_pressed)
-
     # check if bird hit, yes,
     # crash bird to ground
     # stop background animation
     if bird.is_hit(screen):
         pass
-
+    else:
+        bg.update_background(screen)
+        bird.fly_up_down(screen, key_pressed)
 
 def game_not_started(screen, bg, bird):
     bg.update_background(screen)
