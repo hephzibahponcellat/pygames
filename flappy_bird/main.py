@@ -45,8 +45,7 @@ def main():
         else:
             game_not_started(screen, bg, bird)
 
-        pygame.display.flip()
-        pygame.time.delay(250)
+        bg.update_display()
 
 
 if __name__ == '__main__':
