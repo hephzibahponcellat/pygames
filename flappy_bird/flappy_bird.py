@@ -76,18 +76,30 @@ class Bird(GameScreen):
         self.bird_up = pygame.image.load(self.bird_up_img)
         self.bird_down = pygame.image.load(self.bird_down_img)
 
+        self.use_bird = None
+
     def fly(self, screen):
         if self.wing_up:
             self.wing_up = False
-            b = pygame.transform.rotate(self.bird_up, self.bird_angle)
+            self.use_bird = pygame.transform.rotate(self.bird_up, self.bird_angle)
         else:
             self.wing_up = True
-            b = pygame.transform.rotate(self.bird_down, self.bird_angle)
+            self.use_bird = pygame.transform.rotate(self.bird_down, self.bird_angle)
 
         if self.bird_angle <= self.BIRD_MAX_DOWN_ANGLE:
-            b = pygame.transform.rotate(self.bird, self.bird_angle)
+            self.use_bird = pygame.transform.rotate(self.bird, self.bird_angle)
 
-        screen.blit(b, (self.bird_pos['x'], self.bird_pos['y']))
+        # bird should not fly beyond fence
+        if self.bird_pos['y'] + self.use_bird.get_height() >= self.gs.SCREEN_HEIGHT-40:
+            self.bird_pos['y'] = self.gs.SCREEN_HEIGHT-40-self.use_bird.get_height()
+
+        screen.blit(self.use_bird, (self.bird_pos['x'], self.bird_pos['y']))
+
+    def is_hit(self, screen):
+        # if bird hits ground
+        if self.bird_pos['y'] + self.use_bird.get_height() >= self.gs.SCREEN_HEIGHT - 40:
+            return True
+        return False
 
     def fly_up_down(self, screen, key_pressed):
         # if key pressed move bird up
@@ -97,14 +109,15 @@ class Bird(GameScreen):
             self.bird_angle = self.BIRD_MAX_UP_ANGLE
 
         else:
-            self.bird_pos['y'] += self.BIRD_Y
 
             # gradually turn bird down till -90
+            # bird falls down in various speed
             if self.bird_angle > self.BIRD_MAX_DOWN_ANGLE:
                 self.bird_angle -= self.BIRD_CHANGE_ANGLE
-            else:
                 self.bird_pos['y'] += self.BIRD_Y
+            else:
                 self.bird_angle = self.BIRD_MAX_DOWN_ANGLE
+                self.bird_pos['y'] += (self.BIRD_Y * 2)
 
         self.fly(screen)
 
