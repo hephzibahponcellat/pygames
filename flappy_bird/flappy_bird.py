@@ -119,6 +119,10 @@ class Bird(GameScreen):
         self.use_bird = None
         self.bird_rect = None
 
+    def display(self, screen):
+        screen.blit(self.use_bird, self.bird_rect)
+
+
     def fly(self, screen):
         if self.wing_up:
             self.wing_up = False
@@ -136,7 +140,8 @@ class Bird(GameScreen):
 
         self.bird_rect = self.use_bird.get_rect()
         self.bird_rect.topleft = (self.bird_pos['x'], self.bird_pos['y'])
-        screen.blit(self.use_bird, self.bird_rect)
+
+        self.display(screen)
 
     def is_hit(self, screen, pipe):
         # if bird hits ground

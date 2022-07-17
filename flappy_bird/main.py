@@ -9,6 +9,7 @@ def play_game(screen, bg, bird, pipe, score, key_pressed):
     if bird.is_hit(screen, pipe):
         score.game_over = True
         bg.freeze_bg(screen)
+        bird.display(screen)
 
     if not score.game_over:
         bg.update_background(screen)
