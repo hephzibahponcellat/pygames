@@ -36,7 +36,7 @@ class Background(GameScreen):
 
     def __init__(self, game_screen):
         self.gs = game_screen
-        self.delay_ms = 200
+        self.delay_ms = 150
 
         self.bg_img = 'images/bg.png'
         self.fence_img = 'images/fence.png'
@@ -122,7 +122,7 @@ class Bird(GameScreen):
         # if key pressed move bird up
         # else move bird down
         if key_pressed:
-            self.bird_pos['y'] -= (self.BIRD_Y * 2)
+            self.bird_pos['y'] -= self.BIRD_Y
             self.bird_angle = self.BIRD_MAX_UP_ANGLE
 
         else:
@@ -131,13 +131,78 @@ class Bird(GameScreen):
             # bird falls down in various speed
             if self.bird_angle > self.BIRD_MAX_DOWN_ANGLE:
                 self.bird_angle -= self.BIRD_CHANGE_ANGLE
-                self.bird_pos['y'] += self.BIRD_Y
+                self.bird_pos['y'] += 10
             else:
                 self.bird_angle = self.BIRD_MAX_DOWN_ANGLE
-                self.bird_pos['y'] += (self.BIRD_Y * 2)
+                self.bird_pos['y'] += self.BIRD_Y
 
         self.fly(screen)
 
 
-class Pipe():
-    pass
+class Pipe(GameScreen):
+    def __init__(self, game_screen):
+        self.gs = game_screen
+        self.DISTANCE = 200
+        self.BIRD_HEIGHT = 30
+        self.BIRD_VAR = 3
+        self.MINHEIGHT = 80
+        self.MAXHEIGHT = 320
+        self.pipes = []
+
+        self.pipe_img = 'images/pipe.png'
+        self.pipe_cup_img = 'images/pipe_cup.png'
+        self.pipe = pygame.image.load(self.pipe_img)
+        self.pipe_cup = pygame.image.load(self.pipe_cup_img)
+
+    def add_pipe(self):
+        # get random heights
+        height = random.randrange(self.MINHEIGHT, self.MAXHEIGHT)
+
+        # resize pipe height
+        bottom_pipe = pygame.transform.scale(self.pipe, (self.pipe.get_width(), height))
+
+        # resized pipe position on fence
+        bottom_pipe_rect = bottom_pipe.get_rect()
+        bottom_pipe_rect.bottomleft = (500, self.gs.SCREEN_HEIGHT - 40)
+
+        # pipe cup position on pipe
+        bottom_pipe_cup_rect = self.pipe_cup.get_rect()
+        bottom_pipe_cup_rect.midtop = bottom_pipe_rect.midtop
+
+        # height of pipe from top
+        height = (self.gs.SCREEN_HEIGHT - 40) - height - (self.BIRD_HEIGHT * self.BIRD_VAR)
+
+        # resize top pipe height
+        top_pipe = pygame.transform.scale(self.pipe, (self.pipe.get_width(), height))
+
+        # resized pipe position from top
+        top_pipe_rect = top_pipe.get_rect()
+        top_pipe_rect.left = bottom_pipe_rect.left
+
+        # top pipe cup postion on top pipe
+        top_pipe_cup_rect = self.pipe_cup.get_rect()
+        top_pipe_cup_rect.midbottom = top_pipe_rect.midbottom
+
+        # add bottom and top pipes
+        self.pipes.append({'bottom_pipe': bottom_pipe, 'bottom_pipe_rect': bottom_pipe_rect, 'bottom_pipe_cup_rect': bottom_pipe_cup_rect, 'top_pipe': top_pipe, 'top_pipe_rect': top_pipe_rect, 'top_pipe_cup_rect': top_pipe_cup_rect})
+
+    def update_pipe(self, screen):
+
+        # add pipe
+        if not self.pipes or self.pipes[-1]['bottom_pipe_rect'].right <= self.gs.SCREEN_HEIGHT - self.DISTANCE:
+            self.add_pipe()
+
+        # remove pipe
+        if self.pipes and self.pipes[0]['bottom_pipe_cup_rect'].right < 0:
+            del self.pipes[0]
+
+        for pipe in self.pipes:
+            pipe['bottom_pipe_rect'].left -= 10
+            pipe['bottom_pipe_cup_rect'].left -= 10
+            screen.blit(pipe['bottom_pipe'], pipe['bottom_pipe_rect'])
+            screen.blit(self.pipe_cup, pipe['bottom_pipe_cup_rect'])
+
+            pipe['top_pipe_rect'].left -= 10
+            pipe['top_pipe_cup_rect'].left -= 10
+            screen.blit(pipe['top_pipe'], pipe['top_pipe_rect'])
+            screen.blit(self.pipe_cup, pipe['top_pipe_cup_rect'])
