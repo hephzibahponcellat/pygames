@@ -17,6 +17,7 @@ class GameScreen():
 
 class Score():
     def __init__(self):
+        self.game_over = False
         self.game_score = 0
         self.IMPACT_FONT = 'impact'
         self.IMPACT_FONT_SIZE = 40
@@ -35,8 +36,11 @@ class Score():
 class Background(GameScreen):
 
     def __init__(self, game_screen):
+        self.WHITE= (255, 255, 255)
+
         self.gs = game_screen
         self.delay_ms = 150
+        self.blink = True
 
         self.bg_img = 'images/bg.png'
         self.fence_img = 'images/fence.png'
@@ -47,12 +51,27 @@ class Background(GameScreen):
         self.fence_y = self.gs.SCREEN_HEIGHT - 40
         self.fences = [{'x': 0, 'y': self.fence_y}]
 
-    def update_background(self, screen):
+    def freeze_bg(self, screen):
+        if self.blink:
+            screen.fill(self.WHITE)
+            self.update_display()
+            self.blink = False
+
+        self.update_display(delay_ms=0)
+        self.display_bg(screen)
+
+    def display_bg(self, screen):
         screen.blit(self.bg, (0, 0))
 
         for fence in self.fences:
-            fence['x'] -= 10
             screen.blit(self.fence, (fence['x'], fence['y']))
+
+    def update_background(self, screen):
+
+        for fence in self.fences:
+            fence['x'] -= 10
+
+        self.display_bg(screen)
 
         fence_w = self.fence.get_width()
 
@@ -65,9 +84,13 @@ class Background(GameScreen):
         if self.fences[0]['x'] + fence_w < 0:
             self.fences.pop(0)
 
-    def update_display(self):
+    def update_display(self, delay_ms=None):
+
+        if delay_ms is None:
+            delay_ms = self.delay_ms
+
         pygame.display.flip()
-        pygame.time.delay(self.delay_ms)
+        pygame.time.delay(delay_ms)
 
 
 class Bird(GameScreen):

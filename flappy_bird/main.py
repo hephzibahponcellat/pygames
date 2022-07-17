@@ -3,11 +3,14 @@ from flappy_bird import *
 
 def play_game(screen, bg, bird, pipe, score, key_pressed):
     # check if bird hit, yes,
+    # blink screen
     # crash bird to ground
     # stop background animation
     if bird.is_hit(screen, pipe):
-        pass
-    else:
+        score.game_over = True
+        bg.freeze_bg(screen)
+
+    if not score.game_over:
         bg.update_background(screen)
         pipe.update_pipe(screen)
         bird.fly_up_down(screen, key_pressed)
