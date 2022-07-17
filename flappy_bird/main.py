@@ -18,12 +18,11 @@ def play_game(screen, bg, bird, pipe, score, key_pressed):
         pipe.update_pipe(screen)
         bird.fly_up_down(screen, key_pressed)
 
-    score.display_score(screen)
+    score.display(screen)
 
 
 def game_not_started(screen, bg, bird, score):
     bg.update_background(screen)
-    score.display_score(screen)
     bird.fly(screen)
 
 
