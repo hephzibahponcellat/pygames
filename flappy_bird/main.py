@@ -5,7 +5,7 @@ def play_game(screen, bg, bird, pipe, score, key_pressed):
     # check if bird hit, yes,
     # crash bird to ground
     # stop background animation
-    if bird.is_hit(screen):
+    if bird.is_hit(screen, pipe):
         pass
     else:
         bg.update_background(screen)

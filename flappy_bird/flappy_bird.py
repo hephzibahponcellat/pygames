@@ -112,13 +112,39 @@ class Bird(GameScreen):
 
         screen.blit(self.use_bird, (self.bird_pos['x'], self.bird_pos['y']))
 
-    def is_hit(self, screen):
+    def is_hit(self, screen, pipe):
         # if bird hits ground
         if self.bird_pos['y'] + self.use_bird.get_height() >= self.gs.SCREEN_HEIGHT - 40:
             return True
+        """
+        # if bird hits pipe
+        if pipe.pipes:
+            bird_rect = self.use_bird.get_rect()
+
+            # if bird hits top pipe
+            top_pipe_rect = pipe.pipes[0]['top_pipe'].get_rect()
+            top_pipe_cup_rect = pipe.pipes[0]['top_pipe_cup_rect']
+
+            if bird_rect.colliderect(top_pipe_rect):
+                print('hit top pipe', top_pipe_rect, bird_rect)
+                return True
+
+            if pygame.Rect.colliderect(bird_rect, top_pipe_cup_rect):
+                print('hit top cup')
+                return True
+
+            # is rect detecting outside of game window too ?
+            # if bird flies top and hit top pipe outside game window
+            imaginary_rect = pygame.Rect(bird_rect.topleft, (top_pipe_rect.width, abs(bird_rect.top)))
+            if pygame.Rect.colliderect(bird_rect, imaginary_rect):
+                print('here', imaginary_rect)
+                return True
+        """
+
         return False
 
     def fly_up_down(self, screen, key_pressed):
+
         # if key pressed move bird up
         # else move bird down
         if key_pressed:
@@ -131,7 +157,7 @@ class Bird(GameScreen):
             # bird falls down in various speed
             if self.bird_angle > self.BIRD_MAX_DOWN_ANGLE:
                 self.bird_angle -= self.BIRD_CHANGE_ANGLE
-                self.bird_pos['y'] += 10
+                self.bird_pos['y'] += 20
             else:
                 self.bird_angle = self.BIRD_MAX_DOWN_ANGLE
                 self.bird_pos['y'] += self.BIRD_Y
