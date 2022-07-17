@@ -6,16 +6,18 @@ def play_game(screen, bg, bird, pipe, score, key_pressed):
     # blink screen
     # crash bird to ground
     # stop background animation
-    if bird.is_hit(screen, pipe):
+    if score.game_over or bird.is_hit(screen, pipe):
         score.game_over = True
         bg.freeze_bg(screen)
-        bird.display(screen)
+        pipe.display(screen)
+        bird.fall_down(screen)
 
     if not score.game_over:
         bg.update_background(screen)
         pipe.update_pipe(screen)
         bird.fly_up_down(screen, key_pressed)
-        score.display_score(screen)
+
+    score.display_score(screen)
 
 
 def game_not_started(screen, bg, bird, score):

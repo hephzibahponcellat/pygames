@@ -181,24 +181,37 @@ class Bird(GameScreen):
 
         return False
 
+    def fly_up(self):
+        self.bird_pos['y'] -= self.BIRD_Y
+        self.bird_angle = self.BIRD_MAX_UP_ANGLE
+
+    def fly_down(self):
+        # gradually turn bird down till -90
+        # bird falls down in various speed
+        if self.bird_angle > self.BIRD_MAX_DOWN_ANGLE:
+            self.bird_angle -= self.BIRD_CHANGE_ANGLE
+            self.bird_pos['y'] += 20
+        else:
+            self.bird_angle = self.BIRD_MAX_DOWN_ANGLE
+            self.bird_pos['y'] += self.BIRD_Y
+
+    def fall_down(self, screen):
+        # if bird is top out of game window, set y to 0
+        if self.bird_pos['y'] < 0:
+            self.bird_pos['y'] = 0
+
+        self.fly_down()
+        self.fly(screen)
+
     def fly_up_down(self, screen, key_pressed):
 
         # if key pressed move bird up
         # else move bird down
         if key_pressed:
-            self.bird_pos['y'] -= self.BIRD_Y
-            self.bird_angle = self.BIRD_MAX_UP_ANGLE
-
+            self.fly_up()
         else:
+            self.fly_down()
 
-            # gradually turn bird down till -90
-            # bird falls down in various speed
-            if self.bird_angle > self.BIRD_MAX_DOWN_ANGLE:
-                self.bird_angle -= self.BIRD_CHANGE_ANGLE
-                self.bird_pos['y'] += 20
-            else:
-                self.bird_angle = self.BIRD_MAX_DOWN_ANGLE
-                self.bird_pos['y'] += self.BIRD_Y
 
         self.fly(screen)
 
@@ -250,6 +263,13 @@ class Pipe(GameScreen):
         # add bottom and top pipes
         self.pipes.append({'bottom_pipe': bottom_pipe, 'bottom_pipe_rect': bottom_pipe_rect, 'bottom_pipe_cup_rect': bottom_pipe_cup_rect, 'top_pipe': top_pipe, 'top_pipe_rect': top_pipe_rect, 'top_pipe_cup_rect': top_pipe_cup_rect})
 
+    def display(self, screen):
+        for pipe in self.pipes:
+            screen.blit(pipe['bottom_pipe'], pipe['bottom_pipe_rect'])
+            screen.blit(self.pipe_cup, pipe['bottom_pipe_cup_rect'])
+            screen.blit(pipe['top_pipe'], pipe['top_pipe_rect'])
+            screen.blit(self.pipe_cup, pipe['top_pipe_cup_rect'])
+
     def update_pipe(self, screen):
 
         # add pipe
@@ -263,10 +283,8 @@ class Pipe(GameScreen):
         for pipe in self.pipes:
             pipe['bottom_pipe_rect'].left -= 10
             pipe['bottom_pipe_cup_rect'].left -= 10
-            screen.blit(pipe['bottom_pipe'], pipe['bottom_pipe_rect'])
-            screen.blit(self.pipe_cup, pipe['bottom_pipe_cup_rect'])
 
             pipe['top_pipe_rect'].left -= 10
             pipe['top_pipe_cup_rect'].left -= 10
-            screen.blit(pipe['top_pipe'], pipe['top_pipe_rect'])
-            screen.blit(self.pipe_cup, pipe['top_pipe_cup_rect'])
+
+        self.display(screen)
