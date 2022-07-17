@@ -1,3 +1,4 @@
-== Demo
+Demo
+====
 
 ![alt-text](demo.gif)
