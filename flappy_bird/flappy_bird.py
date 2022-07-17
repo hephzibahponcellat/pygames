@@ -119,30 +119,37 @@ class Bird(GameScreen):
         # if bird hits ground
         if self.bird_pos['y'] + self.use_bird.get_height() >= self.gs.SCREEN_HEIGHT - 40:
             return True
-        """
+
         # if bird hits pipe
         if pipe.pipes:
-            bird_rect = self.use_bird.get_rect()
 
             # if bird hits top pipe
-            top_pipe_rect = pipe.pipes[0]['top_pipe'].get_rect()
+            top_pipe_rect = pipe.pipes[0]['top_pipe_rect']
             top_pipe_cup_rect = pipe.pipes[0]['top_pipe_cup_rect']
 
-            if bird_rect.colliderect(top_pipe_rect):
-                print('hit top pipe', top_pipe_rect, bird_rect)
+            if self.bird_rect.colliderect(top_pipe_rect):
                 return True
 
-            if pygame.Rect.colliderect(bird_rect, top_pipe_cup_rect):
-                print('hit top cup')
+            if self.bird_rect.colliderect(top_pipe_cup_rect):
                 return True
 
-            # is rect detecting outside of game window too ?
             # if bird flies top and hit top pipe outside game window
-            imaginary_rect = pygame.Rect(bird_rect.topleft, (top_pipe_rect.width, abs(bird_rect.top)))
-            if pygame.Rect.colliderect(bird_rect, imaginary_rect):
-                print('here', imaginary_rect)
+            imaginary_rect = pygame.Rect(top_pipe_rect.topleft, top_pipe_rect.size)
+            if self.bird_rect.y < 0:
+                imaginary_rect.height = abs(self.bird_rect.y)
+            imaginary_rect.bottom = top_pipe_rect.top
+            if self.bird_rect.colliderect(imaginary_rect):
                 return True
-        """
+
+            # if bird hits bottom pipe
+            bottom_pipe_rect = pipe.pipes[0]['bottom_pipe_rect']
+            bottom_pipe_cup_rect = pipe.pipes[0]['bottom_pipe_cup_rect']
+
+            if self.bird_rect.colliderect(bottom_pipe_rect):
+                return True
+
+            if self.bird_rect.colliderect(bottom_pipe_cup_rect):
+                return True
 
         return False
 
