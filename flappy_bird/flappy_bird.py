@@ -1,5 +1,6 @@
 import pygame
 import random
+import pickle
 
 
 class GameScreen():
@@ -15,28 +16,71 @@ class GameScreen():
         return screen
 
 
-class Score():
-    def __init__(self):
+class Score(GameScreen):
+    def __init__(self, game_screen):
+        self.gs = game_screen
         self.game_over = False
         self.game_score = 0
         self.IMPACT_FONT = 'impact'
         self.IMPACT_FONT_SIZE = 40
+
+        self.FINAL_BOARD_SIZE = 30
         self.SCORE_POS = (250, 100)
         self.SCORE_COLOR = (255, 255, 0)
 
         pygame.font.init()
         self.score = pygame.font.SysFont(self.IMPACT_FONT, self.IMPACT_FONT_SIZE)
+        self.board = pygame.font.SysFont(self.IMPACT_FONT, self.FINAL_BOARD_SIZE)
 
     def display(self, screen):
         score = str(self.game_score)
         label = self.score.render(score, 1, self.SCORE_COLOR)
         screen.blit(label, self.SCORE_POS)
 
+    def display_multiline(self, screen, text):
+        lines = text.splitlines()
+        label_rect = None
+
+        for line in lines:
+            label = self.board.render(line, 1, self.SCORE_COLOR)
+
+            if label_rect:
+                tmp = label_rect.midbottom
+                label_rect = label.get_rect()
+                label_rect.midtop = tmp
+            else:
+                label_rect = label.get_rect()
+                label_rect.center = (self.gs.SCREEN_WIDTH//2, 150)
+
+            screen.blit(label, label_rect)
+
+    def final_board(self, screen):
+        text = 'SCORE\n' + str(self.game_score)
+
+        # find best score
+        try:
+            fp = open('.best_score.pickle', 'rb')
+        except FileNotFoundError:
+            best_score = self.game_score
+        else:
+            best_score = pickle.load(fp)
+            if self.game_score > best_score:
+                best_score = self.game_score
+            fp.close()
+
+        # write best score to tmp file
+        with open('.best_score.pickle', 'wb') as fp:
+            pickle.dump(best_score, fp)
+
+        text += '\nBEST\n' + str(best_score)
+
+        self.display_multiline(screen, text)
+
 
 class Background(GameScreen):
 
     def __init__(self, game_screen):
-        self.WHITE= (255, 255, 255)
+        self.WHITE = (255, 255, 255)
 
         self.gs = game_screen
         self.delay_ms = 150
@@ -121,7 +165,6 @@ class Bird(GameScreen):
 
     def display(self, screen):
         screen.blit(self.use_bird, self.bird_rect)
-
 
     def fly(self, screen):
         if self.wing_up:
@@ -212,7 +255,6 @@ class Bird(GameScreen):
         else:
             self.fly_down()
 
-
         self.fly(screen)
 
 
@@ -221,9 +263,9 @@ class Pipe(GameScreen):
         self.gs = game_screen
         self.DISTANCE = 200
         self.BIRD_HEIGHT = 30
-        self.BIRD_VAR = 3
+        self.BIRD_VAR = 4.5
         self.MINHEIGHT = 80
-        self.MAXHEIGHT = 320
+        self.MAXHEIGHT = (self.gs.SCREEN_HEIGHT - 40) - self.MINHEIGHT - (self.BIRD_HEIGHT * self.BIRD_VAR)
         self.pipes = []
 
         self.pipe_img = 'images/pipe.png'

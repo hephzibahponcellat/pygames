@@ -13,12 +13,12 @@ def play_game(screen, bg, bird, pipe, score, key_pressed):
         bg.freeze_bg(screen)
         pipe.display(screen)
         bird.fall_down(screen)
+        score.final_board(screen)
     else:
         bg.update_background(screen)
         pipe.update_pipe(screen)
         bird.fly_up_down(screen, key_pressed)
-
-    score.display(screen)
+        score.display(screen)
 
 
 def game_not_started(screen, bg, bird, score):
@@ -31,7 +31,7 @@ def main():
     bg = Background(s)
     bird = Bird(s)
     pipe = Pipe(s)
-    score = Score()
+    score = Score(s)
 
     screen = s.create_screen()
 
