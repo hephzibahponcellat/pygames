@@ -19,7 +19,6 @@ class GameScreen():
 class Score(GameScreen):
     def __init__(self, game_screen):
         self.gs = game_screen
-        self.game_over = False
         self.game_score = 0
         self.IMPACT_FONT = 'impact'
         self.IMPACT_FONT_SIZE = 40
@@ -176,8 +175,8 @@ class Bird(GameScreen):
         self.bird_up = pygame.image.load(self.bird_up_img)
         self.bird_down = pygame.image.load(self.bird_down_img)
 
-        self.use_bird = None
-        self.bird_rect = None
+        self.use_bird = self.bird
+        self.bird_rect = self.use_bird.get_rect()
 
     def display(self, screen):
         screen.blit(self.use_bird, self.bird_rect)
@@ -201,6 +200,11 @@ class Bird(GameScreen):
         self.bird_rect.topleft = (self.bird_pos['x'], self.bird_pos['y'])
 
         self.display(screen)
+
+    def is_bird_ground(self):
+        if self.bird_pos['y'] == self.gs.SCREEN_HEIGHT-40-self.use_bird.get_height():
+            return True
+        return False
 
     def is_hit(self, screen, pipe):
         # if bird hits ground
