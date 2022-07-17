@@ -27,9 +27,12 @@ class Score(GameScreen):
         self.FINAL_BOARD_SIZE = 30
         self.SCORE_POS = (250, 100)
         self.SCORE_COLOR = (255, 255, 0)
+        self.BOARD_COLOR = (235, 52, 91)
+        self.BOARD_BG_COLOR = (0, 0, 0)
 
         pygame.font.init()
         self.score = pygame.font.SysFont(self.IMPACT_FONT, self.IMPACT_FONT_SIZE)
+
         self.board = pygame.font.SysFont(self.IMPACT_FONT, self.FINAL_BOARD_SIZE)
 
     def display(self, screen):
@@ -41,18 +44,30 @@ class Score(GameScreen):
         lines = text.splitlines()
         label_rect = None
 
-        for line in lines:
-            label = self.board.render(line, 1, self.SCORE_COLOR)
+        # find lengthiest line
+        longest_line = max(lines, key=len)
+        label = self.board.render(longest_line, 1, self.SCORE_COLOR)
+        max_size = (label.get_width() + 40, label.get_height() + 10)
 
-            if label_rect:
-                tmp = label_rect.midbottom
-                label_rect = label.get_rect()
-                label_rect.midtop = tmp
+        # fill bg color
+        temp_surface = pygame.Surface((max_size))
+        label_rect = temp_surface.get_rect()
+        label_rect.center = (self.gs.SCREEN_WIDTH//2, 150)
+
+        for i, line in enumerate(lines):
+            # toggle color
+            if (i + 1) % 2 == 0:
+                text = self.board.render(line, 1, self.SCORE_COLOR)
             else:
-                label_rect = label.get_rect()
-                label_rect.center = (self.gs.SCREEN_WIDTH//2, 150)
+                text = self.board.render(line, 1, self.BOARD_COLOR)
 
-            screen.blit(label, label_rect)
+            if i:
+                label_rect.midtop = label_rect.midbottom
+
+            w = (label_rect.w - text.get_width()) // 2
+            temp_surface.fill(self.BOARD_BG_COLOR)
+            temp_surface.blit(text, (w, 10))
+            screen.blit(temp_surface, (label_rect))
 
     def final_board(self, screen):
         text = 'SCORE\n' + str(self.game_score)
@@ -73,6 +88,7 @@ class Score(GameScreen):
             pickle.dump(best_score, fp)
 
         text += '\nBEST\n' + str(best_score)
+        text += '\nSPACE to Retry'
 
         self.display_multiline(screen, text)
 
