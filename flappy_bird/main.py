@@ -1,7 +1,7 @@
 from flappy_bird import *
 
 
-def play_game(screen, bg, bird, score, key_pressed):
+def play_game(screen, bg, bird, pipe, score, key_pressed):
     # check if bird hit, yes,
     # crash bird to ground
     # stop background animation
@@ -9,8 +9,9 @@ def play_game(screen, bg, bird, score, key_pressed):
         pass
     else:
         bg.update_background(screen)
-        score.display_score(screen)
+        pipe.update_pipe(screen)
         bird.fly_up_down(screen, key_pressed)
+        score.display_score(screen)
 
 
 def game_not_started(screen, bg, bird, score):
@@ -23,6 +24,7 @@ def main():
     s = GameScreen()
     bg = Background(s)
     bird = Bird(s)
+    pipe = Pipe(s)
     score = Score()
 
     screen = s.create_screen()
@@ -50,7 +52,7 @@ def main():
         # if space / mouse clicked, start game
         # else just make the bird fly
         if start_game:
-            play_game(screen, bg, bird, score, key_pressed)
+            play_game(screen, bg, bird, pipe, score, key_pressed)
         else:
             game_not_started(screen, bg, bird, score)
 
